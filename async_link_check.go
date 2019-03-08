@@ -7,13 +7,12 @@ import (
     "log"
     "net/http"
     "os"
+    "time"
 )
 
 type urlStatus struct {
     url    string
     status bool
-    // status_code int
-    // redirect_url string
 }
 
 func FollowUrl(link []string, c chan urlStatus) {
@@ -27,6 +26,8 @@ func FollowUrl(link []string, c chan urlStatus) {
 }
 
 func main() {
+    start := time.Now()
+
     // Pass CSV file with -csv option. Defaults to urls.csv
     file := flag.String("csv", "urls.csv", "csv file name")
     flag.Parse()
@@ -59,4 +60,6 @@ func main() {
             fmt.Println(result[i].url, "is down !!")
         }
     }
+    elapsed := time.Since(start)
+    fmt.Println("Async link checking for", len(links), "links took", elapsed.Seconds(), "seconds")
 }
